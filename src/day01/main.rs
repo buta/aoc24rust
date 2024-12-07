@@ -4,7 +4,7 @@ use std::time::Instant;
 
 fn main() -> io::Result<()> {
     let start_time = Instant::now();
-    let file = File::open("src/day01/input01.txt")?;
+    let file = File::open("src/day01/input.txt")?;
     let reader = BufReader::new(file);
 
     let mut first: Vec<i64> = Vec::new();

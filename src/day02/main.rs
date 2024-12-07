@@ -25,7 +25,7 @@ fn check(numbers: &Vec<i64>) -> Option<usize> {
 
 fn main() -> io::Result<()> {
     let start_time = Instant::now();
-    let file = File::open("src/day02/input01.txt")?;
+    let file = File::open("src/day02/input.txt")?;
     let reader = BufReader::new(file);
 
     let mut reports: Vec<Vec<i64>> = Vec::new();

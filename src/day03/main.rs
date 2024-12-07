@@ -6,7 +6,7 @@ const MULT: &str = "mul(";
 const DO: &str = "do()";
 const DONT: &str = "don't()";
 enum Command {
-    MULT(i64, i64),
+    MUL(i64, i64),
     DO,
     DONT,
 }
@@ -52,7 +52,7 @@ impl Iterator for Tokenizer {
                 let a: Option<i64> = extract_char(',');
                 let b: Option<i64> = extract_char(')');
                 if a.is_some() && b.is_some() {
-                    return Some(Command::MULT(a?, b?));
+                    return Some(Command::MUL(a?, b?));
                 }
             } else if self.data[self.index..].starts_with(DO) {
                 self.index += DO.len();
@@ -69,7 +69,7 @@ impl Iterator for Tokenizer {
 
 fn main() -> io::Result<()> {
     let start_time = Instant::now();
-    let message: String = fs::read_to_string("src/day03/input01.txt")?;
+    let message: String = fs::read_to_string("src/day03/input.txt")?;
     let tokenizer = Tokenizer::new(message);
 
     let mut sum1: i64 = 0;
@@ -77,7 +77,7 @@ fn main() -> io::Result<()> {
     let mut is_active = true;
     for t in tokenizer {
         match t {
-            Command::MULT(a, b) => {
+            Command::MUL(a, b) => {
                 sum1 += a * b;
                 if is_active {
                     sum2 += a * b;

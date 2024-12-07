@@ -11,11 +11,11 @@
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=day03",
+                    "--bin=day07",
                     "--package=aoc24rust"
                 ],
                 "filter": {
-                    "name": "day03",
+                    "name": "day07",
                     "kind": "bin"
                 }
             },
