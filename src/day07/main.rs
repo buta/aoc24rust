@@ -119,7 +119,8 @@ mod test {
         assert_eq!(concat(0, 1), 1);
         assert_eq!(concat(10, 10), 1010);
         assert_eq!(concat(1234, 1234), 12341234);
-        assert_eq!(concat(1230, 1230), 12301230);
+        assert_eq!(concat(12, 1230), 121230);
         assert_eq!(concat(2843285760, 74), 284328576074);
+        assert_eq!(concat(74, 2843285760), 742843285760);
     }
 }

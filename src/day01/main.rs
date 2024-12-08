@@ -10,7 +10,6 @@ fn main() -> io::Result<()> {
     let mut first: Vec<i64> = Vec::new();
     let mut second: Vec<i64> = Vec::new();
     {
-        //let re = Regex::new(r"^(?<first>\d+)\s+(?<second>\d+)").unwrap();
         for line in reader.lines() {
             let tmp = line?;
             let idx = tmp.find(' ').unwrap();
