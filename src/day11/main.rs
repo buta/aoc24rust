@@ -1,13 +1,8 @@
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
+use std::error::Error;
 use std::fs;
 use std::time::Instant;
-use std::{collections::HashSet, error::Error};
-
-use aoc24rust::utils::{Point, Rect};
-
-const TRAIL_HEAD: u8 = 0;
-const TRAIL_END: u8 = 9;
 
 type StoneMap = HashMap<i64, Stone>;
 
