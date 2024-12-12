@@ -79,7 +79,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut stones = Stone::parse(&input);
 
     for _ in 0..25 {
-        let mut solved: HashMap<i64, Stone> = HashMap::new();
+        let mut solved: StoneMap = HashMap::new();
         for (_, stone) in stones {
             stone.simulate(&mut solved);
         }
@@ -88,7 +88,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("Part1: {}", Stone::count(&stones));
 
     for _ in 0..50 {
-        let mut solved: HashMap<i64, Stone> = HashMap::new();
+        let mut solved: StoneMap = HashMap::new();
         for (_, stone) in stones {
             stone.simulate(&mut solved);
         }
@@ -136,7 +136,7 @@ mod test {
             "2097446912 14168 4048 2 0 2 4 40 48 2024 40 48 80 96 2 8 6 7 6 0 3 2",
         ];
         for exp in EXPECTED {
-            let mut solved: HashMap<i64, Stone> = HashMap::new();
+            let mut solved: StoneMap = HashMap::new();
             for (_, stone) in stones {
                 stone.simulate(&mut solved);
             }

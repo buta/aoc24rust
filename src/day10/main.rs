@@ -2,19 +2,19 @@ use std::fs;
 use std::time::Instant;
 use std::{collections::HashSet, error::Error};
 
-use aoc24rust::utils::{Point, Rect};
+use aoc24rust::utils::{PointT, RectT};
 
 const TRAIL_HEAD: u8 = 0;
 const TRAIL_END: u8 = 9;
 
-const DIRECTIONS: [Point<i32>; 4] = [
-    Point { x: 0, y: 1 },
-    Point { x: 1, y: 0 },
-    Point { x: 0, y: -1 },
-    Point { x: -1, y: 0 },
+const DIRECTIONS: [PointT<i32>; 4] = [
+    PointT { x: 0, y: 1 },
+    PointT { x: 1, y: 0 },
+    PointT { x: 0, y: -1 },
+    PointT { x: -1, y: 0 },
 ];
 
-fn walk(p: &Point<i32>, map: &Vec<Vec<u8>>, bounds: &Rect<i32>) -> Vec<Point<i32>> {
+fn walk(p: &PointT<i32>, map: &Vec<Vec<u8>>, bounds: &RectT<i32>) -> Vec<PointT<i32>> {
     let mut ret = Vec::new();
     let height = map[p.y as usize][p.x as usize];
     if height == TRAIL_END {
@@ -52,7 +52,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         map.iter().all(|v| v.len() == map[0].len()),
         "Map width is not uniform"
     );
-    let bounds = Rect {
+    let bounds = RectT {
         x: 0 as i32,
         y: 0 as i32,
         width: map[0].len() as i32,
@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     for x in 0..map[0].len() {
         for y in 0..map.len() {
             if map[y][x] == TRAIL_HEAD {
-                let p = Point {
+                let p = PointT {
                     x: x as i32,
                     y: y as i32,
                 };
