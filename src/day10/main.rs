@@ -24,7 +24,7 @@ fn walk(p: &PointT<i32>, map: &Vec<Vec<u8>>, bounds: &RectT<i32>) -> Vec<PointT<
     }
     for dir in DIRECTIONS.iter() {
         let target = p.clone() + dir.clone();
-        if bounds.is_inside(&target) {
+        if bounds.contains_point(&target) {
             let t_height = map[target.y as usize][target.x as usize];
             if t_height == height + 1 {
                 ret.extend(walk(&target, &map, &bounds));

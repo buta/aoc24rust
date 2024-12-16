@@ -84,7 +84,7 @@ impl Garden {
     ) -> i64 {
         let mut size: i64 = 0;
         if !out_visited.contains(&p) {
-            if self.bounds.is_inside(&p) && self.map[p.y as usize][p.x as usize] == Some(id) {
+            if self.bounds.contains_point(&p) && self.map[p.y as usize][p.x as usize] == Some(id) {
                 out_visited.insert(p.clone());
                 size += 1;
                 for dir in DIRECTIONS {
