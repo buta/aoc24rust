@@ -35,6 +35,28 @@ pub mod utils {
         }
     }
 
+    impl<T> Ord for PointT<T>
+    where
+        T: Ord + Copy,
+    {
+        fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            self.x.cmp(&other.x).then(self.y.cmp(&other.y))
+        }
+    }
+
+    impl<T> PartialOrd for PointT<T>
+    where
+        T: Ord + Copy,
+    {
+        fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+            match self.x.partial_cmp(&other.x) {
+                Some(core::cmp::Ordering::Equal) => {}
+                ord => return ord,
+            }
+            self.y.partial_cmp(&other.y)
+        }
+    }
+
     impl<T> PointT<T>
     where
         T: Ord + Copy + ops::Sub + Signed,

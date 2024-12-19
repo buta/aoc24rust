@@ -16,7 +16,7 @@ const DIRECTIONS: [Point; 4] = [
     Point { x: 0, y: -1 },
     Point { x: -1, y: 0 },
 ];
-const PLAYER: [char; 4] = ['^', '>', 'v', '<'];
+const _PLAYER: [char; 4] = ['^', '>', 'v', '<'];
 
 struct Day16 {
     level: Vec<String>,
@@ -177,7 +177,7 @@ impl Day16 {
         }
     }
 
-    fn draw(
+    fn _draw(
         &self,
         pos: Option<&Point>,
         dir: Option<&i32>,
@@ -197,7 +197,7 @@ impl Day16 {
                 }) == pos
                 {
                     match dir {
-                        Some(0..4) => ret.push(PLAYER[*dir.unwrap() as usize]),
+                        Some(0..4) => ret.push(_PLAYER[*dir.unwrap() as usize]),
                         _ => todo!(),
                     }
                 } else if visited_pos.contains(&Point {
