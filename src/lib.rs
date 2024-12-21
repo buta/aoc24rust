@@ -66,6 +66,42 @@ pub mod utils {
         }
     }
 
+    impl<T> PointT<T>
+    where
+        T: Ord + Copy + ops::Sub + ops::AddAssign + ops::Add + Signed,
+    {
+        pub fn get_points_with_distance(&self, distance: T) -> Vec<PointT<T>> {
+            // (coord)      =>  N    NE   E    SE   S    SW   W    NW
+            // (2,2) dist 1 =>  2,3       3,2       2,1       1,2
+            // (2,2) dist 2 =>  2,4  3,3  4,2  3,1  2,0  1,1  0,2  1,3
+            let mut ret = Vec::new();
+            let mut d = T::zero();
+            loop {
+                if d >= distance {
+                    break;
+                }
+                ret.push(PointT {
+                    x: self.x + d,
+                    y: self.y + (distance - d),
+                });
+                ret.push(PointT {
+                    x: self.x + (distance - d),
+                    y: self.y - d,
+                });
+                ret.push(PointT {
+                    x: self.x - d,
+                    y: self.y - (distance - d),
+                });
+                ret.push(PointT {
+                    x: self.x - (distance - d),
+                    y: self.y + d,
+                });
+                d += T::one();
+            }
+            return ret;
+        }
+    }
+
     impl<T: Ord + Display> Display for PointT<T> {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             write!(f, "{}, {}", self.x, self.y)
@@ -122,5 +158,40 @@ pub mod utils {
                 },
             ]
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use std::collections::HashSet;
+
+    use utils::PointT;
+
+    use super::*;
+    #[test]
+    fn test_point_generation() {
+        let point = PointT { x: 2, y: 2 };
+        let exp_1 = HashSet::from([
+            PointT { x: 2, y: 3 },
+            PointT { x: 3, y: 2 },
+            PointT { x: 2, y: 1 },
+            PointT { x: 1, y: 2 },
+        ]);
+        let dist_1 = point.get_points_with_distance(1);
+
+        assert!(HashSet::from_iter(dist_1.into_iter()) == exp_1);
+
+        let dist_2 = point.get_points_with_distance(2);
+        let exp_2 = HashSet::from([
+            PointT { x: 2, y: 4 },
+            PointT { x: 3, y: 3 },
+            PointT { x: 4, y: 2 },
+            PointT { x: 3, y: 1 },
+            PointT { x: 2, y: 0 },
+            PointT { x: 1, y: 1 },
+            PointT { x: 0, y: 2 },
+            PointT { x: 1, y: 3 },
+        ]);
+        assert!(HashSet::from_iter(dist_2.into_iter()) == exp_2);
     }
 }

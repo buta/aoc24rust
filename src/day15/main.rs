@@ -59,41 +59,41 @@ impl Day15 {
         //let mut blocks: Vec<Rc<dyn Block>> = Vec::new();
         //let mut level: Vec<Vec<Option<Rc<dyn Block>>>> = Vec::new();
         let mut parsing_level = true;
-        for (y, line) in input.lines().enumerate() {
-            if parsing_level {
-                if line.is_empty() {
-                    parsing_level = false;
-
-                    //ret.bounds.height = y as i64;
-                }
-                for (x, c) in line.chars().enumerate() {
-                    match c {
-                        CLEAR => {}
-                        WALL => {
-                            let wall = Rc::new(RefCell::new(Wall {}));
-                            let mut tmp = ret.get_mut();
-                            tmp.blocks.push(wall.clone());
-                            //ret.borrow_mut().borrow().level[y][x] = Some(wall);
-                        }
-                        CRATE => {
-                            let crate_ = Rc::new(RefCell::new(Crate {
-                                day: ret,
-                                position: Point {
-                                    x: x as i64,
-                                    y: y as i64,
-                                },
-                                width,
-                            }));
-                            //ret.get_mut().blocks.push(crate_.clone());
-                            //ret.get_mut().level[y][x] = Some(crate_);
-                        }
-                        ROBOT => {}
-                        c => panic!("Invalid character in map."),
-                    }
-                }
-            } else {
-            }
-        }
+        //for (y, line) in input.lines().enumerate() {
+        //    if parsing_level {
+        //        if line.is_empty() {
+        //            parsing_level = false;
+        //
+        //            //ret.bounds.height = y as i64;
+        //        }
+        //        for (x, c) in line.chars().enumerate() {
+        //            match c {
+        //                CLEAR => {}
+        //                WALL => {
+        //                    let wall = Rc::new(RefCell::new(Wall {}));
+        //                    let mut tmp = ret.get_mut();
+        //                    tmp.blocks.push(wall.clone());
+        //                    //ret.borrow_mut().borrow().level[y][x] = Some(wall);
+        //                }
+        //                CRATE => {
+        //                    let crate_ = Rc::new(RefCell::new(Crate {
+        //                        day: ret,
+        //                        position: Point {
+        //                            x: x as i64,
+        //                            y: y as i64,
+        //                        },
+        //                        width,
+        //                    }));
+        //                    //ret.get_mut().blocks.push(crate_.clone());
+        //                    //ret.get_mut().level[y][x] = Some(crate_);
+        //                }
+        //                ROBOT => {}
+        //                c => panic!("Invalid character in map."),
+        //            }
+        //        }
+        //    } else {
+        //    }
+        //}
         return ret;
     }
 
@@ -104,7 +104,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let start_time: Instant = Instant::now();
     let input = &fs::read_to_string("src/day14/input.txt")?.replace("\r\n", "\n");
     let mut part1 = Day15::parse(input, 1);
-    part1.borrow_mut().simulate();
+    //part1.borrow_mut().simulate();
 
     let mut part2 = Day15::parse(input, 2);
     //{
