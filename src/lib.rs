@@ -1,6 +1,6 @@
 pub mod utils {
     use num::{Integer, Signed};
-    use std::{fmt::Display, ops};
+    use std::{cmp::min, fmt::Display, ops};
     #[derive(PartialEq, Eq, Hash, Clone)]
     pub struct PointT<T: Ord> {
         pub x: T,
@@ -17,6 +17,20 @@ pub mod utils {
             return PointT {
                 x: self.x + _rhs.x,
                 y: self.y + _rhs.y,
+            };
+        }
+    }
+
+    impl<T> ops::Sub for PointT<T>
+    where
+        T: Ord + Copy + ops::Sub<Output = T>,
+    {
+        type Output = PointT<T>;
+
+        fn sub(self, _rhs: PointT<T>) -> PointT<T> {
+            return PointT {
+                x: self.x - _rhs.x,
+                y: self.y - _rhs.y,
             };
         }
     }
@@ -159,13 +173,50 @@ pub mod utils {
             ]
         }
     }
+
+    pub struct RingBuffer<T: Sized, const COUNT: usize> {
+        buffer: [T; COUNT],
+        inserted: usize,
+    }
+
+    impl<T: Sized + Copy + Default, const COUNT: usize> RingBuffer<T, COUNT> {
+        pub fn new() -> RingBuffer<T, COUNT> {
+            RingBuffer {
+                buffer: [T::default(); COUNT],
+                inserted: 0,
+            }
+        }
+
+        pub fn push(&mut self, item: T) {
+            let idx = self.inserted.rem_euclid(COUNT);
+            self.buffer[idx] = item;
+            self.inserted += 1;
+        }
+
+        pub fn get(&self) -> impl Iterator<Item = T> {
+            let idx: usize;
+            let len: usize;
+            if self.inserted < COUNT {
+                idx = 0;
+                len = self.inserted;
+            } else {
+                idx = self.inserted.rem_euclid(COUNT);
+                len = COUNT;
+            }
+            return self.buffer.into_iter().cycle().skip(idx).take(len);
+        }
+
+        pub fn len(&self) -> usize {
+            return min(self.inserted, COUNT);
+        }
+    }
 }
 
 #[cfg(test)]
 mod test {
     use std::collections::HashSet;
 
-    use utils::PointT;
+    use utils::{PointT, RingBuffer};
 
     use super::*;
     #[test]
@@ -194,4 +245,38 @@ mod test {
         ]);
         assert!(HashSet::from_iter(dist_2.into_iter()) == exp_2);
     }
+
+    #[test]
+    fn test_ring_buffer() {
+        let mut rb = RingBuffer::<i32, 4>::new();
+        let test_values = vec![1, 2, 3, 4, 5, 6, 7];
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items.len() == 0);
+        assert!(rb.len() == 0);
+
+        rb.push(test_values[0]);
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items[..] == test_values[0..1]);
+        assert!(rb.len() == 1);
+
+        rb.push(test_values[1]);
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items[..] == test_values[0..2]);
+        assert!(rb.len() == 2);
+
+        rb.push(test_values[2]);
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items[..] == test_values[0..3]);
+        assert!(rb.len() == 3);
+
+        rb.push(test_values[3]);
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items[..] == test_values[0..4]);
+        assert!(rb.len() == 4);
+
+        rb.push(test_values[4]);
+        let items = rb.get().collect::<Vec<i32>>();
+        assert!(items[..] == test_values[1..5]);
+        assert!(rb.len() == 4);
+    } //
 }

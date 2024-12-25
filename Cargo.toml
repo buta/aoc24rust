@@ -84,6 +84,20 @@ path = "src/day19/main.rs"
 name = "day20"
 path = "src/day20/main.rs"
 
+[[bin]]
+name = "day21"
+path = "src/day21/main.rs"
+
+[[bin]]
+name = "day22"
+path = "src/day22/main.rs"
+
+[[bin]]
+name = "day23"
+path = "src/day23/main.rs"
+
+
 [dependencies]
+itertools = "0.13.0"
+lazy_static = "1.5.0"
 num = "0.4.3"
-rayon = "1.10.0"
