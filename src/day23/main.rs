@@ -39,12 +39,12 @@ impl Day23 {
 
     fn part1(&self) -> i64 {
         let mut triangles: HashSet<(String, String, String)> = HashSet::new();
-        for (k, v) in self.lan.iter() {
+        for (k, pairs) in self.lan.iter() {
             if !k.starts_with("t") {
                 continue;
             }
-            for a in v.iter() {
-                for b in v.iter() {
+            for a in pairs.iter() {
+                for b in pairs.iter() {
                     if a == b {
                         continue;
                     }
@@ -61,25 +61,34 @@ impl Day23 {
     }
 
     fn part2(&self) -> String {
-        let mut graphs;
-
-        let mut ret = String::new();
-        ret
+        let mut groups: Vec<HashSet<String>> = Vec::new();
+        for (k, pairs) in self.lan.iter() {
+            let mut group: HashSet<String> = HashSet::from([k.to_string()]);
+            for p in pairs {
+                if k == p {
+                    continue;
+                }
+                if let Some(pair_pair) = self.lan.get(p) {
+                    if !group.contains(p) && group.is_subset(&pair_pair) {
+                        group.insert(p.to_string());
+                    }
+                }
+            }
+            groups.push(group);
+        }
+        groups.sort_by(|a, b| b.len().cmp(&a.len()));
+        let first = groups.first().expect("No groups found");
+        let mut ret = first.into_iter().collect::<Vec<&String>>();
+        ret.sort();
+        ret.into_iter().join(",")
     }
 }
 fn main() -> Result<(), Box<dyn Error>> {
     let start_time = Instant::now();
     let input = fs::read_to_string("src/day23/input.txt")?;
-
-    let mut day = Day23::parse(&input);
-    //let secrets: Vec<i64> =
-    //    .lines()
-    //    .filter_map(|n| n.parse::<i64>().ok())
-    //    .collect();
-
+    let day = Day23::parse(&input);
     println!("Part1: {}", day.part1());
-
-    println!("Part2: {}", -1);
+    println!("Part2: {}", day.part2());
     let elapsed = start_time.elapsed();
     println!("Run time: {:?}", elapsed);
     Ok(())
@@ -87,22 +96,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod test {
-    use std::fmt;
-
     use super::*;
     #[test]
     fn test_example1() {
         let input = "kh-tc\nqp-kh\nde-cg\nka-co\nyn-aq\nqp-ub\ncg-tb\nvc-aq\ntb-ka\nwh-tc\nyn-cg\nkh-ub\nta-co\nde-co\ntc-td\ntb-wq\nwh-td\nta-ka\ntd-qp\naq-cg\nwq-ub\nub-vc\nde-ta\nwq-aq\nwq-vc\nwh-yn\nka-de\nkh-ta\nco-tc\nwh-qp\ntb-vc\ntd-yn";
         let day = Day23::parse(input);
         assert!(day.part1() == 7);
+        assert!(day.part2() == "co,de,ka,ta");
     }
-
-    #[test]
-    fn test_example2() {}
-
-    #[test]
-    fn test_buffer() {}
-
-    #[test]
-    fn test_buffer_pack_unpack() {}
 }
